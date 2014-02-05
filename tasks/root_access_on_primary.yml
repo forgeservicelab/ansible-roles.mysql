@@ -7,10 +7,10 @@
 - name: Temporary mount of the DRBD device
   mount:
     name=/data
-    src="/dev/drbd0
+    src=/dev/drbd0
     fstype=ext4
     state=mounted
-  when: mysql.stat.exists
+  when: "not mysql.stat.exists"
 
 - name: Temporarily enable MySQL server to ensure LAN root access
   service:
