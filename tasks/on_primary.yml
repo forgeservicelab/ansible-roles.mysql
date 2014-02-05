@@ -1,0 +1,12 @@
+---
+- name: Move the MySQL data to the DRBD device
+  shell: mv /var/lib/mysql/ /data/
+  when: stats.stat.isdir
+
+- name: Unmount the DRBD device
+  mount:
+    name=/data
+    src=/dev/drbd0
+    fstype=ext4
+    state=unmounted
+  notify: restart heartbeat
