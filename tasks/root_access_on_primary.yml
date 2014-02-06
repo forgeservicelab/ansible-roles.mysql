@@ -19,7 +19,7 @@
 
 - name: Allow root access from nodes on the LAN via the cluster IP
   mysql_user:
-    host="{{ lookup('file','../../ha-disk/vars/router_ip') }}"
+    host="{{ ROUTER_PUBLIC_IP }}"
     name="root"
     password=""
     login_user=root
