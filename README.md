@@ -6,6 +6,8 @@ Sets up a MySQL Highly Available cluster based on Heartbeat and DRBD infrastruct
 Requirements
 ------------
 
+The target machines for this role (exactly 2) must appear on the inventory file grouped under one and only one host group, the `group_names` variable is used to configure HA resources.
+
 This role is a client of the [ha-disk role](https://git.forgeservicelab.fi/ansible-roles/ha-disk), please read the documentation on that role for more information on prerequisites.
 
 Role Variables
