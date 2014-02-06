@@ -16,6 +16,7 @@ Role Variables
 - `heartbeat_service_name` - Name of the service to be managed by heartbeat as it appears on `/etc/init.d`, defaults to `mysql`.
 - `OS_FLOATIP` - Floating (Virtual) IP assigned to the HA cluster, read by the [ha-disk role](https://git.forgeservicelab.fi/ansible-roles/ha-disk).
 - `ROUTER_PUBLIC_IP` - IP of the public interface on the target network router. Read from [ha-disk role](https://git.forgeservicelab.fi/ansible-roles/ha-disk) and initially OpenStack specific, defines the IP, other than localhost, from which `root` is allowed to access the MySQL server.
+- `primary` - Flag that indicates the target host in which to run tasks that only need to be executed in one node. This is expected to be an inventory variable within the host group.
 
 Dependencies
 ------------
