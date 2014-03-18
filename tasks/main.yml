@@ -46,15 +46,24 @@
     path=/var/lib/mysql
   register: stats
 
+- name: Determine primary
+  shell: "drbdadm role {{ group_names[0] }}"
+  register drbdstate
+
+- name: Set primary if needed
+  shell: "drbdadm primary {{ group_names[0] }}"
+  register: primaryset
+  when: "primary is defined and 'Primary' not in drbdstate.stdout.split('/')"
+
 - name: Configure MySQL data on the DRBD device
   include: on_primary.yml
-  when: "primary is defined"
+  when: "drbdstate.stdout.split('/')[0] == 'Primary' or primaryset.changed"
 
 - name: Remove the MySQL data
   file:
     path=/var/lib/mysql/
     state=absent
-  when: "primary is not defined and stats.stat.isdir"
+  when: "drbdstate.stdout.spldrbdstate.stdout.split('/')[0] != 'Primary' and stats.stat.isdir"
 
 - name: Link the MySQL data from its original location
   file:
