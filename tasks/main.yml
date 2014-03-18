@@ -16,9 +16,18 @@
     - heartbeat
 #    - drbd
 
+- name: Determine primary
+  shell: "drbdadm role {{ group_names[0] }}"
+  register: drbdstate
+
+- name: Set primary if needed
+  shell: "drbdadm primary {{ group_names[0] }}"
+  register: primaryset
+  when: "primary is defined and 'Primary' not in drbdstate.stdout.split('/')"
+
 - name: Allow root access to MySQL server through the cluster IP
   include: root_access_on_primary.yml
-  when: "primary is defined"
+  when: "drbdstate.stdout.split('/')[0] == 'Primary' or primaryset.changed"
 
 - name: Stop and disable MySQL server
   service:
@@ -45,15 +54,6 @@
   stat:
     path=/var/lib/mysql
   register: stats
-
-- name: Determine primary
-  shell: "drbdadm role {{ group_names[0] }}"
-  register: drbdstate
-
-- name: Set primary if needed
-  shell: "drbdadm primary {{ group_names[0] }}"
-  register: primaryset
-  when: "primary is defined and 'Primary' not in drbdstate.stdout.split('/')"
 
 - name: Configure MySQL data on the DRBD device
   include: on_primary.yml
