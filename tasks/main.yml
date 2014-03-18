@@ -63,7 +63,7 @@
   file:
     path=/var/lib/mysql/
     state=absent
-  when: "drbdstate.stdout.spldrbdstate.stdout.split('/')[0] != 'Primary' and stats.stat.isdir"
+  when: "drbdstate.stdout.split('/')[0] != 'Primary' and stats.stat.isdir"
 
 - name: Link the MySQL data from its original location
   file:
