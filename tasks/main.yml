@@ -48,7 +48,7 @@
 
 - name: Determine primary
   shell: "drbdadm role {{ group_names[0] }}"
-  register drbdstate
+  register: drbdstate
 
 - name: Set primary if needed
   shell: "drbdadm primary {{ group_names[0] }}"
