@@ -19,11 +19,13 @@
 
 - name: Allow root access from nodes on the LAN via the cluster IP
   mysql_user:
-    host="{{ ROUTER_PUBLIC_IP }}"
+    host="{{ item }}"
     name="root"
     password=""
     login_user=root
     login_password=""
     priv="*.*:ALL,GRANT"
     state=present
+  with_items:
+    - "{{ ALLOWED_IPS }}"
   notify: restart heartbeat
