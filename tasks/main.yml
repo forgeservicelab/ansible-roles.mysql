@@ -1,16 +1,16 @@
 ---
 - name: Install MySQL server and its python transport
   apt:
-    name={{ item }}
-    state=present
+    name: "{{ item }}"
+    state: present
   with_items:
     - mysql-server
     - python-mysqldb
 
 - name: Release resources for local configuration
   service:
-    name={{ item }}
-    state=stopped
+    name: "{{ item }}"
+    state: stopped
   notify: restart heartbeat
   with_items:
     - heartbeat
@@ -31,28 +31,28 @@
 
 - name: Stop and disable MySQL server
   service:
-    name=mysql
-    enabled=no
-    state=stopped
+    name: mysql
+    enabled: no
+    state: stopped
   notify: restart heartbeat
 
 - name: Allow MySQL to listen on all interfaces
   lineinfile:
-    dest=/etc/mysql/my.cnf
-    regexp='^bind-address(.*)'
-    line='# bind-address\1'
-    backrefs=yes
-    state=present
+    dest: /etc/mysql/my.cnf
+    regexp: '^bind-address(.*)'
+    line: '# bind-address\1'
+    backrefs: yes
+    state: present
   notify: restart heartbeat
 
 - name: Create data directory
   file:
-    path=/data
-    state=directory
+    path: /data
+    state: directory
 
 - name: Check data symlink
   stat:
-    path=/var/lib/mysql
+    path: /var/lib/mysql
   register: stats
 
 - name: Configure MySQL data on the DRBD device
@@ -61,12 +61,12 @@
 
 - name: Remove the MySQL data
   file:
-    path=/var/lib/mysql/
-    state=absent
+    path: /var/lib/mysql/
+    state: absent
   when: "drbdstate.stdout.split('/')[0] != 'Primary' and stats.stat.isdir"
 
 - name: Link the MySQL data from its original location
   file:
-    src=/data/mysql/
-    dest=/var/lib/mysql
-    state=link
+    src: /data/mysql/
+    dest: /var/lib/mysql
+    state: link

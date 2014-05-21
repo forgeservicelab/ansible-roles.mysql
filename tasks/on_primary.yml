@@ -5,8 +5,8 @@
 
 - name: Unmount the DRBD device
   mount:
-    name=/data
-    src=/dev/drbd0
-    fstype=ext4
-    state=unmounted
+    name: /data
+    src: /dev/drbd0
+    fstype: ext4
+    state: unmounted
   notify: restart heartbeat

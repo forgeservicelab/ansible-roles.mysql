@@ -1,31 +1,31 @@
 ---
 - name: Ensure MySQL data directory is mounted for temporary MySQL run
   stat:
-    path=/data/mysql
+    path: /data/mysql
   register: mysql
 
 - name: Temporary mount of the DRBD device
   mount:
-    name=/data
-    src=/dev/drbd0
-    fstype=ext4
-    state=mounted
+    name: /data
+    src: /dev/drbd0
+    fstype: ext4
+    state: mounted
   when: "not mysql.stat.exists"
 
 - name: Temporarily enable MySQL server to ensure LAN root access
   service:
-    name=mysql
-    state=started
+    name: mysql
+    state: started
 
 - name: Allow root access from nodes on the LAN via the cluster IP
   mysql_user:
-    host="{{ item }}"
-    name="root"
-    password=""
-    login_user=root
-    login_password=""
-    priv="*.*:ALL,GRANT"
-    state=present
+    host: "{{ item }}"
+    name: "root"
+    password: ""
+    login_user: root
+    login_password: ""
+    priv: "*.*:ALL,GRANT"
+    state: present
   with_items:
     - "{{ ALLOWED_IPS }}"
   notify: restart heartbeat
