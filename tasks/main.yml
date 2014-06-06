@@ -70,3 +70,4 @@
     src: /data/mysql/
     dest: /var/lib/mysql
     state: link
+    force: yes
