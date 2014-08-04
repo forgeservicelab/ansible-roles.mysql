@@ -7,15 +7,6 @@
     - mysql-server
     - python-mysqldb
 
-- name: Release resources for local configuration
-  service:
-    name: "{{ item }}"
-    state: stopped
-  notify: restart heartbeat
-  with_items:
-    - heartbeat
-#    - drbd
-
 - name: Determine primary
   shell: "drbdadm role {{ group_names[0] }}"
   register: drbdstate
